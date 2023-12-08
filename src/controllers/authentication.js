@@ -4,19 +4,18 @@ import {
   getUserByEmail
 } from "../database/UserModel.js";
 import { generateHash, random } from "../helpers/index.js";
-import { registerUser } from "../services/authentication.js";
 
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
+    
     if (!email || !password) {
       return res
         .status(400)
         .json({
           success: false,
-          message: "Wrong email or password",
-          details: "Check your request body."
+          message: "Please provide valid credentials",
+          details: "Check your request body and make sure you have entered valid credentials"
         });
     }
 
@@ -33,7 +32,7 @@ export const login = async (req, res) => {
           details: "Check your request body."
         });
     }
-
+    
     const expectedHash = generateHash(user.authentication.salt, password);
     if (user.authentication.password !== expectedHash) {
       return res
@@ -41,19 +40,14 @@ export const login = async (req, res) => {
         .json({
           success: false,
           message: "Wrong email or password",
-          details: "Check your request body."
+          details: "Check your request body and make sure you have entered valid credentials"
         });
     }
-
+    
     const salt = random();
     user.authentication.sessionToken = generateHash(salt, user._id.toString());
 
     await user.save();
-
-    /*res.cookie("ANTONIO-AUTH", user.authentication.sessionToken, {
-         domain: "localhost",
-         path: "/"
-      });*/
 
     res.status(200).json({
       success: true,
@@ -74,12 +68,13 @@ export const login = async (req, res) => {
       .json({
         success: false,
         message: "Wrong email or password",
-        details: "Check your request body."
+        details: "Check your request body and make sure you have entered valid credentials"
       });
   }
 };
 
-/*export const register = async (req, res) => {
+
+export const register = async (req, res) => {
    const { username, email, password } = req.body;
 
    if (!username || !email || !password) {
@@ -88,7 +83,7 @@ export const login = async (req, res) => {
          status: "Error",
          message: "Oops! something went wrong.",
          details:
-            "Check your request body and make make sure you have entered valid credentials"
+            "Check your request body and make sure you have entered valid credentials"
       });
    }
 
@@ -100,7 +95,7 @@ export const login = async (req, res) => {
          status: "Error",
          message: "Oops! something went wrong.",
          details:
-            "The username you entered already exists.Please try a different username"
+            "The email you entered already exists.Please try a different email"
       });
    }
 
@@ -112,7 +107,7 @@ export const login = async (req, res) => {
          status: "Error",
          message: "Oops! something went wrong.",
          details:
-            "The email you entered already exists.Please try a different email"
+            "The username you entered already exists.Please try a different username"
       });
    }
 
@@ -128,8 +123,11 @@ export const login = async (req, res) => {
 
    res.status(201).json({
       success: true,
-      message: "User created successful",
-      user
+      message: "User created successfully",
+      user: {
+        username: user.username,
+        email: user.email
+      }
    });
    try {
    } catch (error) {
@@ -139,24 +137,4 @@ export const login = async (req, res) => {
          message: error.message
       });
    }
-};*/
-
-export const register = async (req, res) => {
-  try {
-    const user = await registerUser(req);
-    res.status(201).json({
-      success: true,
-      message: "User created successful",
-      user
-    });
-  } catch (error) {
-    console.log(error);
-    res
-      .status(400)
-      .json({
-        success: false,
-        message: "Wrong email or password",
-        details: "Check your request body."
-      });
-  }
 };

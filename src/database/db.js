@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI
+const MONGODB_URI = process.env.MONGODB_URI;
 
 mongoose.connect(MONGODB_URI, {
   // useNewUrlParser: true,
@@ -9,10 +9,10 @@ mongoose.connect(MONGODB_URI, {
 
 const db = mongoose.connection;
 
-db.on('error', (error) => {
-  console.error('❌ Error Connecting to MongoDB:', error);
+db.on("error", error => {
+  console.error("❌ Error Connecting to MongoDB:", error);
 });
 
-db.once('open', () => {
-  console.log('☑️ Connected to MongoDB');
+db.once("open", () => {
+  console.log("=> Connected to MongoDB");
 });

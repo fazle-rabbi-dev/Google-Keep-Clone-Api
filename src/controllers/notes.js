@@ -9,26 +9,28 @@ import {
 export const createNote = async (req, res) => {
   try {
     const { title, body, bgcolor, pin } = req.body;
-    
+
     if (!title || !body) {
       throw {
         message: "Missing required field. Please check your request body"
       };
     }
-    
+
     const noteData = {
       title,
       body,
       author: req.identity._id
-    }
-    if(bgcolor){
-      noteData.preferences.bgcolor
-    }
-    if(pin){
-      noteData.preferences.pin = pin
-    }
-    const note = await createNewNote(noteData);
+    };
     
+    if (bgcolor) {
+      noteData.preferences.bgcolor = bgcolor;
+    }
+    if (pin) {
+      noteData.preferences.pin = pin;
+    }
+    
+    const note = await createNewNote(noteData);
+
     res.status(201).json({
       success: true,
       message: "Note created successfully",
@@ -46,6 +48,7 @@ export const createNote = async (req, res) => {
     });
   }
 };
+
 
 export const getAllNotes = async (req, res) => {
   try {
@@ -65,13 +68,14 @@ export const getAllNotes = async (req, res) => {
   }
 };
 
+
 export const getNote = async (req, res) => {
   const { id } = req.params;
 
   if (!id) {
     throw {
       success: false,
-      message: "Missing required data"
+      message: "Please provide an id as route parameter"
     };
   }
 
@@ -92,24 +96,33 @@ export const getNote = async (req, res) => {
   }
 };
 
+
 export const updateNote = async (req, res) => {
   const { id } = req.params;
-  const { title, body } = req.body
+  const { title, body, bgcolor, pin } = req.body;
 
   try {
     if (!id || !title || !body) {
       throw {
         success: false,
-        message: "Missing required data"
+        message: "Missing required field. Please check your request body or make sure to provide a noteid as route parameter"
       };
     }
-    
+
     const noteData = {
       title,
       body
-    }
-    const note = await updateNoteById(id, noteData);
+    };
     
+    if(bgcolor){
+      noteData.preferences.bgcolor = bgcolor;
+    }
+    if(pin){
+      noteData.preferences.pin = pin;
+    }
+    
+    const note = await updateNoteById(id, noteData);
+
     res.status(200).json({
       success: true,
       message: "Note updated successfully",
@@ -128,6 +141,7 @@ export const updateNote = async (req, res) => {
   }
 };
 
+
 export const deleteNote = async (req, res) => {
   const { id } = req.params;
 
@@ -135,10 +149,10 @@ export const deleteNote = async (req, res) => {
     if (!id) {
       throw {
         success: false,
-        message: "Missing required data"
+        message: "Invalid or missing noteid in route parameter"
       };
     }
-    
+
     const note = await deleteNoteById(id);
     res.status(200).json({
       success: true,

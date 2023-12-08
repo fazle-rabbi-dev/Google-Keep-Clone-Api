@@ -16,7 +16,7 @@ const NoteSchema = new mongoose.Schema({
        default: ""
      },
      pin: {
-       type: Boolean, // todo: check
+       type: Boolean,
        default: false
      }
    },
