@@ -20,16 +20,20 @@ SECRET_KEY=<secret key for hash password>
   - `<method>POST`: Create a new account
   - request body:
   ```js
-  username: "",
-  email: "",
-  password: ""
+  {
+    username: "",
+    email: "",
+    password: ""
+  }
   ```
 - **/auth/login**
   - `<method>POST`: Login to your account
   - request body:
   ```js
-  email: "",
-  password: ""
+  {
+    email: "",
+    password: ""
+  }
   ```
 
 ---
@@ -38,12 +42,14 @@ SECRET_KEY=<secret key for hash password>
   - `<method>POST`: Create a new note
   - request body:
   ```js
-  title: <Your Note Title>,
-  body: <Actual Note>,
-  // Optional
-  preferences: {
-    bgcolor: "bg-red-800", // tailwindcss class
-    pin: true/false, // is note pinned or not?
+  {
+    title: "Demo", // Note Title
+    body: "Hello this is a note...", // Actual Note
+    // Optional
+    preferences: {
+      bgcolor: "bg-red-800", // Tailwindcss class
+      pin: true, // Is note pinned?
+    }
   }
   ```
 - **/notes**
