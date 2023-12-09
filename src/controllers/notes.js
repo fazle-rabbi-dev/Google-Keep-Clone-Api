@@ -3,8 +3,10 @@ import {
   getNotes,
   getNoteById,
   deleteNoteById,
-  updateNoteById
+  updateNoteById,
+  getPinnedNotes
 } from "../database/NoteModel.js";
+import { v4 as uuidv4 } from 'uuid';
 
 export const createNote = async (req, res) => {
   try {
@@ -23,9 +25,14 @@ export const createNote = async (req, res) => {
     };
     
     if (bgcolor) {
+      noteData.preferences = {}
       noteData.preferences.bgcolor = bgcolor;
     }
+    
     if (pin) {
+      noteData.preferences = {
+        ...noteData.preferences
+      }
       noteData.preferences.pin = pin;
     }
     
@@ -51,8 +58,17 @@ export const createNote = async (req, res) => {
 
 
 export const getAllNotes = async (req, res) => {
+  const { pinned } = req.query
+  
   try {
-    const notes = await getNotes(req.identity._id);
+    let notes;
+    
+    if(pinned){
+      notes = await getPinnedNotes(req.identity._id);
+    }else{
+      notes = await getNotes(req.identity._id);
+    }
+    
     res.status(200).json({
       success: true,
       notes
@@ -115,9 +131,13 @@ export const updateNote = async (req, res) => {
     };
     
     if(bgcolor){
+      noteData.preferences = {}
       noteData.preferences.bgcolor = bgcolor;
     }
     if(pin){
+      noteData.preferences = {
+        ...noteData.preferences
+      }
       noteData.preferences.pin = pin;
     }
     
@@ -164,6 +184,112 @@ export const deleteNote = async (req, res) => {
       success: false,
       error: {
         message: "Bad Request",
+        details: error.message
+      }
+    });
+  }
+};
+
+
+export const publishNote = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    if (!id) {
+      throw {
+        success: false,
+        message: "Invalid or missing noteid in route parameter"
+      };
+    }
+
+    const note = await getNoteById(id);
+    note.preferences.published = true;
+
+    const ref = await note.save();
+    
+    res.status(200).json({
+      success: true,
+      message: "Note published successfully",
+      data: {
+        id: ref._id
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: {
+        message: "Bad Request",
+        details: error.message
+      }
+    });
+  }
+};
+
+
+export const unpublishNote = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    if (!id) {
+      throw {
+        success: false,
+        message: "Invalid or missing noteid in route parameter"
+      };
+    }
+
+    const note = await getNoteById(id);
+    note.preferences.published = false;
+
+    const ref = await note.save();
+    
+    res.status(200).json({
+      success: true,
+      message: "Note unpublished successfully",
+      data: {
+        id: ref._id
+      }
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      error: {
+        message: "Bad Request",
+        details: error.message
+      }
+    });
+  }
+};
+
+
+export const getPublicNote = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    if (!id) {
+      throw {
+        success: false,
+        message: "Invalid or missing noteid in route parameter"
+      };
+    }
+
+    const note = await getNoteById(id);
+    
+    if(!note.preferences.published){
+      throw {
+        success: false,
+        status: 401,
+        message: "This note not yet published."
+      };
+    }
+    
+    res.status(200).json({
+      success: true,
+      note
+    });
+  } catch (error) {
+    res.status(error?.status || 400).json({
+      success: false,
+      error: {
         details: error.message
       }
     });

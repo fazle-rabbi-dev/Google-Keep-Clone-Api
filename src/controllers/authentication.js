@@ -123,7 +123,7 @@ export const register = async (req, res) => {
 
    res.status(201).json({
       success: true,
-      message: "User created successfully",
+      message: "Account created successfully",
       user: {
         username: user.username,
         email: user.email
