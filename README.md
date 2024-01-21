@@ -3,18 +3,25 @@
   <h1>Google-Keep-Clone-Api</h1>
 </div>
 
-This project serves as the backend API for my Google Keep Clone built with React. It provides the necessary endpoints to manage notes, enabling seamless integration with the corresponding frontend application. 
+This project serves as the backend API for my Google [Keep Clone](https://github.com/fazle-rabbi-dev/Google-Keep-Clone) built with React. It provides the necessary endpoints to manage notes, enabling seamless integration with the corresponding frontend application. 
 
-### `.env` Setup
-```
-MONGODB_URI=<your mongodb uri>
-SECRET_KEY=<secret key for hash password>
-```
+## Live
+* `Not yet ready!` However, feel free to experiment on your local machine.
 
-## 🚀 Live
-* http://keep-clone.cyclic.sh
+
+## 🚀 Getting started:
+* Clone this repo
+* Setup `.env`
+  ```
+  MONGODB_URI=<your mongodb uri>
+  SECRET_KEY=<secret key for hash password>
+  ```
+* Run app by executing -> `npm start`
+
 
 ## 📃 Docs
+* Base Url: `http://localhost:5000`
+
 #### Authentication
 - **/auth/register**
   - `<method>POST`: Create a new account
