@@ -17,6 +17,6 @@ export default function authentication(router) {
   router.patch("/notes/:id", isauthenticated, isowner, updateNote);
   router.delete("/notes/:id", isauthenticated, isowner, deleteNote);
   router.get("/notes/publish/:id", isauthenticated, isowner, publishNote);
-  router.get("/notes/unpublish/:id", unpublishNote);
+  router.get("/notes/unpublish/:id", isauthenticated, isowner, unpublishNote);
   router.get("/notes/public/:id", getPublicNote);
 }

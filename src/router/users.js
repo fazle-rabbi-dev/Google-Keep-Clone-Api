@@ -1,5 +1,5 @@
 /**
- * This file is not using!
+ * This file is not being used!
 */
 
 import { getAllUsers, deleteUser, updateUser } from '../controllers/users.js';
