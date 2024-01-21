@@ -5,11 +5,11 @@
 
 This project serves as the backend API for my Google [Keep Clone](https://github.com/fazle-rabbi-dev/Google-Keep-Clone) built with React. It provides the necessary endpoints to manage notes, enabling seamless integration with the corresponding frontend application. 
 
-## Created at:
+## Created at
 * *Dec 2023*
 
 ## Live
-* `Not yet ready!` However, feel free to experiment on your local machine.
+* `Not yet deployed!` However, feel free to experiment on your local machine.
 
 ## 🚀 Getting started:
 * Clone this repo
